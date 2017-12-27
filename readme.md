@@ -5,7 +5,7 @@ Simplistic model factory for JavaScript, heavily inspired by Laravel's [Model Fa
 
 ## Install
 
-```
+```bash
 $ yarn add factoria --dev
 ```
 
@@ -51,6 +51,42 @@ const users = factory('user', 5)
 // Generate an array of 5 "user" objects, each with "age" preset to 27
 const usersWithSetAge = factory('user', 5, { age: 27 })
 ```
+
+
+## Test setup tips
+
+Often, you want to set up all model definitions before running the tests. One way to do so is to have one entry point for the factories during test setup. For example, you can have this `test` script defined in `package.json`:
+
+```js
+"test": "mocha-webpack --require tests/setup.js tests/**/*.spec.js"
+```
+
+Then in `tests/setup.js` you can `require('factoria')` and add the model definitions there.
+
+Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instace), with all model definitions registered:
+
+```js
+// tests/factory.js
+import factory from 'factoria'
+
+// define the models
+factory.define('User', faker => ({}))
+       .define('Group', faker => ({}))
+
+// now export factoria itself
+export default factory
+```
+
+```js
+// tests/user.specs.js
+import factory from './factory'
+
+// `factory` is a factoria function instance
+const user = factory('User')
+```
+
+
+###
 
 ## License
 
