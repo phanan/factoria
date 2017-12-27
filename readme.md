@@ -54,4 +54,4 @@ const usersWithSetAge = factory('user', 5, { age: 27 })
 
 ## License
 
-MIT © [An Phan](https://phanan.net)
+MIT © [Phan An](https://phanan.net)
