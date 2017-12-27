@@ -24,7 +24,7 @@ Example:
 ```js
 const define = require('factoria').define
 
-define('user', faker => ({
+define('User', faker => ({
   id: faker.random.number(),
   name: faker.name.findName(),
   email: faker.internet.email(),
@@ -40,16 +40,16 @@ To create model objects, import the factory and call it on the model's defined n
 import factory from 'factoria'
 
 // The simplest case, returns a "user" object
-const user = factory('user')
+const user = factory('User')
 
 // Generate a "user" object with "email" preset to "foo@bar.baz"
-const userWithSetEmail = factory('user', { email: 'foo@bar.baz' })
+const userWithSetEmail = factory('User', { email: 'foo@bar.baz' })
 
 // Generate an array of 5 "user" objects
-const users = factory('user', 5)
+const users = factory('User', 5)
 
 // Generate an array of 5 "user" objects, each with "age" preset to 27
-const usersWithSetAge = factory('user', 5, { age: 27 })
+const usersWithSetAge = factory('User', 5, { age: 27 })
 ```
 
 
