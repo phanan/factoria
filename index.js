@@ -26,7 +26,7 @@ const factory = (model, count = 1, overrides = {}) => {
 
 factory.define = (model, attributes) => {
 	definitions[model] = attributes
-	return this
+	return factory
 }
 
 export default factory

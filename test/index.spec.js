@@ -34,7 +34,7 @@ test('it overrides multiple models\' properties', t => {
 	users.forEach(user => validate(t, user, {email: 'foo@bar.net'}))
 })
 
-test('it throws an error if the model is not found', t => {
-	const error = t.throws(() => factory('booboo'), Error)
-	t.is(error.message, 'Model `booboo` not found.')
+test('it support define chaining', t => {
+	const func = factory.define('foo', () => {})
+	t.true(func === factory)
 })
