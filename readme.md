@@ -63,7 +63,7 @@ Often, you want to set up all model definitions before running the tests. One wa
 
 Then in `tests/setup.js` you can `require('factoria')` and add the model definitions there.
 
-Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instace), with all model definitions registered:
+Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instance), with all model definitions registered:
 
 ```js
 // tests/factory.js
@@ -78,7 +78,7 @@ export default factory
 ```
 
 ```js
-// tests/user.specs.js
+// tests/user.spec.js
 import factory from './factory'
 
 // `factory` is a factoria function instance
