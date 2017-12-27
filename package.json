@@ -1,0 +1,59 @@
+{
+	"name": "factoria",
+	"version": "0.0.0",
+	"description": "Simplistic model factory for JavaScript",
+	"license": "MIT",
+	"repository": "phanan/factoria",
+	"author": {
+		"name": "An Phan",
+		"email": "me@phanan.net",
+		"url": "phanan.net"
+	},
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && ava test/index.spec.js",
+		"build": "BABEL_ENV=production && babel index.js -o ./dist/factoria.min.js"
+	},
+	"babel": {
+		"presets": [
+			"es2015",
+			"minify"
+		]
+	},
+	"files": [
+		"index.js"
+	],
+	"xo": {
+		"semicolon": false
+	},
+	"ava": {
+		"require": [
+			"babel-register",
+			"babel-polyfill"
+		],
+		"files": [
+			"test/*.spec.js"
+		]
+	},
+	"main": "dist/factoria.min.js",
+	"keywords": [
+		"model",
+		"factory",
+		"seed",
+		"dummy",
+		"schema"
+	],
+	"dependencies": {
+		"faker": "^4.1.0"
+	},
+	"devDependencies": {
+		"ava": "^0.20.0",
+		"babel-cli": "^6.26.0",
+		"babel-minify": "^0.2.0",
+		"babel-preset-es2015": "^6.24.1",
+		"babel-preset-minify": "^0.2.0",
+		"xo": "^0.18.2"
+	}
+}
