@@ -13,26 +13,14 @@
     "node": ">=4"
   },
   "scripts": {
-	"lint": "eslint .",
-	"flow": "flow",
-    "test": "yarn lint && yarn flow && ava test/index.spec.js",
+    "lint": "eslint .",
+    "flow": "flow",
+    "test": "yarn lint && yarn flow && jest --verbose",
     "build": "BABEL_ENV=production && babel index.js -o ./dist/factoria.min.js"
   },
   "files": [
     "index.js"
   ],
-  "xo": {
-    "semicolon": false
-  },
-  "ava": {
-    "require": [
-      "babel-register",
-      "babel-polyfill"
-    ],
-    "files": [
-      "test/*.spec.js"
-    ]
-  },
   "main": "dist/factoria.min.js",
   "keywords": [
     "model",
@@ -45,7 +33,6 @@
     "faker": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-minify": "^0.2.0",
@@ -56,9 +43,11 @@
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-flowtype": "^2.46.1",
     "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.12.3",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "flow-bin": "^0.66.0"
+    "flow-bin": "^0.66.0",
+    "jest": "^22.4.2"
   }
 }
