@@ -10,7 +10,7 @@ const validate = (user, overrides = {}) => {
 describe('floria', () => {
   it('generates a model with name', () => validate(factory('user')))
 
-  it('overrides a model\'s properties', () => {
+  it("overrides a model's properties", () => {
     validate(factory('user', { email: 'foo@bar.net' }), { email: 'foo@bar.net' })
   })
 
