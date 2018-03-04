@@ -1,7 +1,4 @@
-import setup from './setup'
 import factory from '..'
-
-setup()
 
 const validate = (user, overrides = {}) => {
   ['id', 'email', 'name'].forEach(key => {

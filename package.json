@@ -21,6 +21,9 @@
   "files": [
     "index.js"
   ],
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js"
+  },
   "main": "dist/factoria.min.js",
   "keywords": [
     "model",
