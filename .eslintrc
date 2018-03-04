@@ -1,0 +1,10 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+		"plugin:flowtype/recommended",
+		"standard"
+  ],
+  "plugins": [
+    "flowtype"
+	]
+}
