@@ -22,11 +22,11 @@ const factory = (model, count = 1, overrides = {}) => {
 			++i
 		}
 	})()]
-}
 
-factory.define = (model, attributes) => {
-	definitions[model] = attributes
-	return factory
+	function define(model, attributes) { // eslint-disable-line no-unused-vars
+		definitions[model] = attributes
+		return this
+	}
 }
 
 export default factory
