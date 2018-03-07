@@ -58,7 +58,7 @@ const usersWithSetAge = factory('User', 5, { age: 27 })
 Often, you want to set up all model definitions before running the tests. One way to do so is to have one entry point for the factories during test setup. For example, you can have this `test` script defined in `package.json`:
 
 ```js
-"test": "mocha-webpack --require tests/setup.js tests/**/*.spec.js"
+"test": "mocha-webpack --require test/setup.js tests/**/*.spec.js"
 ```
 
 Or, if [jest](https://facebook.github.io/jest/) is your thing:
@@ -69,7 +69,7 @@ Or, if [jest](https://facebook.github.io/jest/) is your thing:
 }
 ```
 
-Then in `tests/setup.js` you can `require('factoria')` and add the model definitions there. factoria itself uses this approach for its tests.
+Then in `test/setup.js` you can `require('factoria')` and add the model definitions there. factoria itself uses this approach for its tests.
 
 Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instance), with all model definitions registered:
 
