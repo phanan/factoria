@@ -24,11 +24,11 @@ const factory = (model: string, count: number | Object = 1, overrides: Object = 
       ++i
     }
   })()]
+}
 
-  function define (model: string, attributes: Faker => Object) { // eslint-disable-line no-unused-vars
-    definitions[model] = attributes
-    return this
-  }
+factory.define = (model: string, attributes: Faker => Object): factory => {
+  definitions[model] = attributes
+  return factory
 }
 
 export default factory
