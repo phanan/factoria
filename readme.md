@@ -9,6 +9,8 @@ Simplistic model factory for JavaScript, heavily inspired by Laravel's [Model Fa
 $ yarn add factoria --dev
 ```
 
+> Note: If Node complains about `regeneratorRuntime` not defined, install and require [babel-polyfill](https://babeljs.io/docs/usage/polyfill/) into your setup.
+
 
 ## Usage
 
