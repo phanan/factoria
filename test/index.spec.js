@@ -29,4 +29,8 @@ describe('floria', () => {
   it('supports define chaining', () => {
     expect(factory.define('foo', () => {})).toEqual(factory)
   })
+
+  it('support functions as property overrides', () => {
+    validate(factory('user', { email: () => 'foo@bar.net' }), { email: 'foo@bar.net' })
+  })
 })

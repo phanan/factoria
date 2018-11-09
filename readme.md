@@ -52,6 +52,13 @@ const users = factory('User', 5)
 
 // Generate an array of 5 "user" objects, each with "age" preset to 27
 const usersWithSetAge = factory('User', 5, { age: 27 })
+
+// Use a function as an overriding value. The function will receive a faker instance.
+const user = factory('User', {
+  name: faker => {
+    return faker.name.findName() + ' Jr.'
+  }
+})
 ```
 
 
