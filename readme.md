@@ -74,7 +74,7 @@ Or, if [Jest](https://facebook.github.io/jest/) is your thing:
 
 ```js
 "jest": {
-  "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js"
+  "setupFilesAfterEnv": ["<rootDir>/test/setup.js"]
 }
 ```
 

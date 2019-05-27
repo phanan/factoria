@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import factory from '..'
 
 const validate = (user, overrides = {}) => {

@@ -1,7 +1,6 @@
 {
 	"presets": [
-		"es2015",
-		"flow",
-		"minify"
+		"@babel/preset-env",
+		"@babel/preset-flow"
 	]
 }
