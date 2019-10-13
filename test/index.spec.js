@@ -29,7 +29,7 @@ describe('factoria', () => {
     expect(factory.define('foo', () => {})).toEqual(factory)
   })
 
-  it('support functions as property overrides', () => {
+  it('supports functions as property overrides', () => {
     validate(factory('user', { email: () => 'foo@bar.net' }), { email: 'foo@bar.net' })
   })
 })
