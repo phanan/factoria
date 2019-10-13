@@ -6,7 +6,10 @@ Simplistic model factory for JavaScript, heavily inspired by Laravel's [Model Fa
 ## Install
 
 ```bash
-$ yarn add factoria --dev
+# install factoria
+$ yarn add factoria -D
+# install faker as a peer dependency
+$ yarn add faker -D
 ```
 
 > Note: If Node complains about `regeneratorRuntime` not defined, install and require [babel-polyfill](https://babeljs.io/docs/usage/polyfill/) into your setup.
@@ -19,7 +22,7 @@ $ yarn add factoria --dev
 To define a model, import and use `define` from the module. `define` accepts two arguments:
 
 * `name`: (string) Name of the model, e.g. `'user'`
-* `(faker)` (function) A closure to return the model's attribute definition as an object. This closure will receive an instance of the [Faker](https://github.com/Marak/faker.js/) JavaScript library, which allows you to generate various random testing data.
+* `(faker)` (function) A closure to return the model's attribute definition as an object. This closure will receive a [Faker](https://github.com/Marak/faker.js/) instance, which allows you to generate various random testing data.
 
 Example:
 
@@ -41,16 +44,16 @@ To create model objects, import the factory and call it on the model's defined n
 ```js
 import factory from 'factoria'
 
-// The simplest case, returns a "user" object
+// The simplest case, returns a "User" object
 const user = factory('User')
 
-// Generate a "user" object with "email" preset to "foo@bar.baz"
+// Generate a "User" object with "email" preset to "foo@bar.baz"
 const userWithSetEmail = factory('User', { email: 'foo@bar.baz' })
 
-// Generate an array of 5 "user" objects
+// Generate an array of 5 "User" objects
 const users = factory('User', 5)
 
-// Generate an array of 5 "user" objects, each with "age" preset to 27
+// Generate an array of 5 "User" objects, each with "age" preset to 27
 const usersWithSetAge = factory('User', 5, { age: 27 })
 
 // Use a function as an overriding value. The function will receive a faker instance.
@@ -60,7 +63,6 @@ const user = factory('User', {
   }
 })
 ```
-
 
 ## Test setup tips
 
