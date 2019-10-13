@@ -6,7 +6,7 @@ const validate = (user, overrides = {}) => {
   Object.keys(overrides).forEach(key => expect(user[key]).toBe(overrides[key]))
 }
 
-describe('floria', () => {
+describe('factoria', () => {
   it('generates a model with name', () => validate(factory('user')))
 
   it("overrides a model's properties", () => {
