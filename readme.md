@@ -1,6 +1,6 @@
 # factoria [![Build Status](https://travis-ci.org/phanan/factoria.svg?branch=master)](https://travis-ci.org/phanan/factoria)
 
-Simplistic model factory for JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/5.5/database-testing#writing-factories).
+Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/5.5/database-testing#writing-factories).
 
 
 ## Install
