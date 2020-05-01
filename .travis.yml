@@ -1,4 +1,2 @@
 language: node_js
-node_js:
-  - '8'
-  - '6'
+node_js: [10, 12, 13, 14]
