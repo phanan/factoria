@@ -1,26 +1,28 @@
-// @flow
-const faker: Faker = require('faker')
+/// <reference path=".d.ts"/>
+import faker from 'faker'
 
-const definitions: Object = {}
+const definitions: ModelDefinition = {}
 
-const factory = (model: string, count: number | Object = 1, overrides: Object = {}) => {
+const factory = (model: string, count: number | Overrides = 1, overrides: Overrides = {}): Model | Model[] => {
   if (!(model in definitions)) {
     throw new Error(`Model \`${model}\` not found.`)
   }
 
-  if (typeof count === 'object') {
+  if (typeof count !== 'number') {
     return factory(model, 1, count)
   }
 
   const resolveOverrides = (): Object => {
     const props = Object.assign({}, overrides)
+
     for (let prop in props) {
-      props[prop] = typeof props[prop] === 'function' ? props[prop].call(this, faker) : props[prop]
+      props[prop] = props[prop] instanceof Function ? props[prop].call(this, faker) : props[prop]
     }
+
     return props
   }
 
-  const generateModel = (): Object => {
+  const generateModel = (): Model => {
     return Object.assign(definitions[model](faker), resolveOverrides())
   }
 
@@ -30,7 +32,7 @@ const factory = (model: string, count: number | Object = 1, overrides: Object = 
 
   return [...(function * () {
     let i = 0
-    // $FlowFixMe
+
     while (i < count) {
       yield generateModel()
       ++i
@@ -38,7 +40,7 @@ const factory = (model: string, count: number | Object = 1, overrides: Object = 
   })()]
 }
 
-factory.define = (model: string, attributes: Faker => Object): factory => {
+factory.define = (model: string, attributes: (faker: Faker.FakerStatic) => Object) => {
   definitions[model] = attributes
   return factory
 }

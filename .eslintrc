@@ -1,12 +1,11 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "extends": [
-    "plugin:flowtype/recommended",
     "plugin:jest/recommended",
 		"standard"
   ],
   "plugins": [
-    "flowtype",
+    "@typescript-eslint",
     "jest"
 	]
 }
