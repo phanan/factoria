@@ -72,7 +72,7 @@ Often, you want to set up all model definitions before running the tests. One wa
 "test": "mocha-webpack --require test/setup.js tests/**/*.spec.js"
 ```
 
-Or, if [Jest](https://facebook.github.io/jest/) is your thing:
+Or, if [Jest](https://facebook.github.io/jest/) is your cup of tea:
 
 ```js
 "jest": {
