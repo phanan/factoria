@@ -1,6 +1,6 @@
 {
   "name": "factoria",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Simplistic model factory for Node/JavaScript",
   "license": "MIT",
   "repository": "phanan/factoria",
