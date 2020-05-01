@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": false,
+    "downlevelIteration": true
+  },
+  "include": [
+    "index.ts",
+    "test/**/*.ts"
+  ]
+}

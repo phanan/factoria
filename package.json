@@ -14,8 +14,9 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "flow": "flow",
-    "test": "yarn lint && yarn flow && jest --verbose",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "test": "yarn lint && jest --verbose",
     "build": "rollup -c"
   },
   "files": [
@@ -23,7 +24,7 @@
   ],
   "jest": {
     "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.js"
+      "<rootDir>/test/setup.ts"
     ]
   },
   "main": "dist/factoria.min.js",
@@ -34,31 +35,32 @@
     "dummy",
     "schema"
   ],
-  "dependencies": {
-    "@babel/polyfill": "^7.4.4"
-  },
   "peerDepedencies": {
     "faker": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.8.4",
-    "@babel/preset-env": "7.8.4",
-    "@babel/preset-flow": "7.8.3",
-    "babel-eslint": "8.2.6",
-    "eslint": "4.19.1",
-    "eslint-config-standard": "11.0.0",
-    "eslint-plugin-flowtype": "2.50.3",
-    "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-jest": "21.27.2",
-    "eslint-plugin-node": "6.0.1",
-    "eslint-plugin-promise": "3.8.0",
-    "eslint-plugin-standard": "3.1.0",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
+    "@rollup/plugin-typescript": "^4.1.1",
+    "@types/faker": "^4.1.11",
+    "@types/jest": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "faker": "4.1.0",
-    "flow-bin": "0.66.0",
     "jest": "24.9.0",
     "rollup": "1.31.1",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-uglify": "6.0.4"
+    "rollup-plugin-uglify": "6.0.4",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
   }
 }
