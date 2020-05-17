@@ -1,9 +1,16 @@
-/// <reference path=".d.ts"/>
 import faker from 'faker'
+
+interface ModelDefinition {
+  [model: string]: (faker: Faker.FakerStatic) => object
+}
+
+interface Overrides extends Object {
+  [attribute: string]: any
+}
 
 const definitions: ModelDefinition = {}
 
-const factory = (model: string, count: number | Overrides = 1, overrides: Overrides = {}): Model | Model[] => {
+const factory = <T>(model: string, count: number | Overrides = 1, overrides: Overrides = {}): T | T[] => {
   if (!(model in definitions)) {
     throw new Error(`Model \`${model}\` not found.`)
   }
@@ -15,15 +22,15 @@ const factory = (model: string, count: number | Overrides = 1, overrides: Overri
   const resolveOverrides = (): Object => {
     const props = Object.assign({}, overrides)
 
-    for (let prop in props) {
+    for (const prop in props) {
       props[prop] = props[prop] instanceof Function ? props[prop].call(this, faker) : props[prop]
     }
 
     return props
   }
 
-  const generateModel = (): Model => {
-    return Object.assign(definitions[model](faker), resolveOverrides())
+  const generateModel = (): T => {
+    return Object.assign(definitions[model](faker), resolveOverrides()) as T
   }
 
   if (count === 1) {
@@ -40,7 +47,7 @@ const factory = (model: string, count: number | Overrides = 1, overrides: Overri
   })()]
 }
 
-factory.define = (model: string, attributes: (faker: Faker.FakerStatic) => Object) => {
+factory.define = (model: string, attributes: (faker: Faker.FakerStatic) => object) => {
   definitions[model] = attributes
   return factory
 }

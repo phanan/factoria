@@ -28,6 +28,7 @@
     ]
   },
   "main": "dist/factoria.min.js",
+  "types": "./types.d.ts",
   "keywords": [
     "model",
     "factory",
