@@ -19,9 +19,6 @@
     "test": "yarn lint && jest --verbose",
     "build": "rollup -c && cp types.d.ts dist/types.d.ts"
   },
-  "files": [
-    "index.js"
-  ],
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/test/setup.ts"
