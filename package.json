@@ -17,7 +17,7 @@
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "test": "yarn lint && jest --verbose",
-    "build": "rollup -c"
+    "build": "rollup -c && cp types.d.ts dist/types.d.ts"
   },
   "files": [
     "index.js"
@@ -28,7 +28,7 @@
     ]
   },
   "main": "dist/factoria.min.js",
-  "types": "./types.d.ts",
+  "types": "dist/types.d.ts",
   "keywords": [
     "model",
     "factory",
