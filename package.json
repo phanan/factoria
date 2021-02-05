@@ -24,7 +24,7 @@
       "<rootDir>/test/setup.ts"
     ]
   },
-  "main": "dist/factoria.min.js",
+  "main": "dist/factoria.js",
   "types": "./types.d.ts",
   "keywords": [
     "model",
