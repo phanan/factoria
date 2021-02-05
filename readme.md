@@ -22,20 +22,20 @@ To define a model, import and use `define` from the module. `define` accepts two
 
 Example:
 
-```js
+```ts
 const define = require('factoria').define
 
 define('User', faker => ({
-  id: faker.random.number(),
+  id: faker.random.uuid(),
   name: faker.name.findName(),
   email: faker.internet.email(),
   age: faker.random.number({ min: 13, max: 99 })
 }))
 ```
 
-### 2. Create model objects
+### 2. Generate model objects
 
-To create model objects, import the factory and call it on the model's defined name. Following the previous example:
+To generate model objects, import the factory and call it with the model's defined name. Following the previous example:
 
 ```ts
 import factory from 'factoria'
@@ -52,7 +52,7 @@ const users = factory('User', 5)
 // Generate an array of 5 "User" objects, each with "age" preset to 27
 const usersWithSetAge = factory('User', 5, { age: 27 })
 
-// Use a function as an overriding value. The function will receive a faker instance.
+// Use a function as an overriding value. The function will receive a Faker instance.
 const user = factory('User', {
   name: faker => {
     return faker.name.findName() + ' Jr.'
@@ -64,19 +64,51 @@ const user: User = factory<User>('User')
 const users: User[] = factory<User>('User', 3)
 ```
 
+## Nested factories
+
+factoria fully supports nested factories. For example, if you have a `Role` and a `User` model, the setup might look like this:
+
+```ts
+import factory from 'factoria'
+
+factory.define('Role', faker => {
+  name: faker.random.arrayElement(['user', 'manager', 'admin'])
+}).define('User', faker => ({
+  email: faker.internet.email(),
+  role: factory('Role')
+}))
+```
+
+Calling `factory('User')` will generate an object of the expected shape e.g.,
+
+```js
+{
+  email: 'foo@bar.com',
+  role: {
+    name: 'admin'
+  }
+}
+```
+
 ## Test setup tips
 
 Often, you want to set up all model definitions before running the tests. One way to do so is to have one entry point for the factories during test setup. For example, you can have this `test` script defined in `package.json`:
 
-```js
-"test": "mocha-webpack --require test/setup.js tests/**/*.spec.js"
+```json
+{
+  "test": "mocha-webpack --require test/setup.js tests/**/*.spec.js"
+}
 ```
 
 Or, if [Jest](https://facebook.github.io/jest/) is your cup of tea:
 
-```js
-"jest": {
-  "setupFilesAfterEnv": ["<rootDir>/test/setup.js"]
+```json
+{
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setup.js"
+    ]
+  }
 }
 ```
 
@@ -104,8 +136,6 @@ import factory from './factory'
 const user = factory('User')
 ```
 
-
-###
 
 ## License
 
