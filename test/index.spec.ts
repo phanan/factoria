@@ -41,7 +41,7 @@ describe('factoria', () => {
     assertUser(factory<Company>('company').manager)
   })
 
-  it('support nested attributes with overrides', () => {
+  it('supports nested attributes with overrides', () => {
     const company = factory<Company>('company', {
       manager: {
         name: 'Bob the CEO'
@@ -50,7 +50,7 @@ describe('factoria', () => {
     assertUser(company.manager, { name: 'Bob the CEO' })
   })
 
-  it('support nested attributes with function overrides', () => {
+  it('supports nested attributes with function overrides', () => {
     const company = factory<Company>('company', {
       manager: {
         name: faker => faker.fake('Bob the CEO')
