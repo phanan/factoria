@@ -5,11 +5,17 @@ on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node: [ 10, 11, 12, 13, 14, 15 ]
 
     steps:
       - name: Check out
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
       - name: Install dependencies
         run: yarn install
       - name: Run unit tests
