@@ -41,7 +41,7 @@ define('User', faker => ({
 
 To create model objects, import the factory and call it on the model's defined name. Following the previous example:
 
-```js
+```ts
 import factory from 'factoria'
 
 // The simplest case, returns a "User" object
@@ -64,8 +64,8 @@ const user = factory('User', {
 })
 
 // Types with generics
-const user = factory<User>('User')
-const users = factory<User>('User', 3)
+const user: User = factory<User>('User')
+const users: User[] = factory<User>('User', 3)
 ```
 
 ## Test setup tips
