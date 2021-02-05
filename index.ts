@@ -5,7 +5,7 @@ type Overrides = Record<string, any>
 
 const definitions: Record<string, (faker: Faker.FakerStatic) => object> = {}
 
-const isDictionary = (thingy: any) => thingy instanceof Object && thingy.constructor === Object
+const isDictionary = (thingy: any) => Object.prototype.toString.call(thingy) === '[object Object]'
 
 const resolveOverrides = (overrides: Overrides): Object => {
   const props = Object.assign({}, overrides)

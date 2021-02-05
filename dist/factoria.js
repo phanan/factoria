@@ -140,7 +140,7 @@ var cjs = deepmerge_1;
 
 var _this = this;
 var definitions = {};
-var isDictionary = function (thingy) { return thingy instanceof Object && thingy.constructor === Object; };
+var isDictionary = function (thingy) { return Object.prototype.toString.call(thingy) === '[object Object]'; };
 var resolveOverrides = function (overrides) {
     var props = Object.assign({}, overrides);
     for (var key in props) {
