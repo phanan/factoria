@@ -1,5 +1,10 @@
 interface User {
-  id: number
+  id: string
   name: string
-  email: string | Function
+  email: string
+}
+
+interface Company {
+  id: string
+  manager: User
 }

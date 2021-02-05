@@ -2,18 +2,14 @@
 
 Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/5.5/database-testing#writing-factories).
 
-
 ## Install
 
 ```bash
 # install factoria
 $ yarn add factoria -D
-# install faker as a peer dependency
+# install Faker as a peer dependency
 $ yarn add faker -D
 ```
-
-> Note: If Node complains about `regeneratorRuntime` not defined, install and require [babel-polyfill](https://babeljs.io/docs/usage/polyfill/) into your setup.
-
 
 ## Usage
 
