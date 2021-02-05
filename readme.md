@@ -62,6 +62,10 @@ const user = factory('User', {
     return faker.name.findName() + ' Jr.'
   }
 })
+
+// Types with generics
+const user = factory<User>('User')
+const users = factory<User>('User', 3)
 ```
 
 ## Test setup tips
