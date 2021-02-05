@@ -1,20 +1,27 @@
-import { uglify } from 'rollup-plugin-uglify'
 import typescript from '@rollup/plugin-typescript'
-import babel from 'rollup-plugin-babel'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
 
 export default {
   input: 'index.ts',
   context: 'this',
   external: ['faker'],
-  output: {
-    file: 'dist/factoria.min.js',
-    format: 'cjs'
-  },
+  output: [
+    {
+      file: 'dist/factoria.min.js',
+      format: 'cjs',
+      exports: 'auto',
+      plugins: [terser()]
+    }, {
+      file: 'dist/factoria.js',
+      format: 'cjs',
+      exports: 'auto'
+    }
+  ],
   plugins: [
     typescript(),
-    uglify(),
-    babel({
-      exclude: 'node_modules/**'
-    })
+    commonjs(),
+    nodeResolve()
   ]
 }
