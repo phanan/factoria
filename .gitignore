@@ -3,3 +3,4 @@ yarn.lock
 *.swp
 .DS_Store
 *.log
+.idea
