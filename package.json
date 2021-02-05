@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "test": "yarn lint && yarn build && jest --verbose",
+    "test": "yarn lint && yarn build && jest",
     "build": "rollup -c"
   },
   "jest": {
