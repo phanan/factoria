@@ -19,4 +19,4 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run unit tests
-        run: yarn test
+        run: yarn lint && yarn test
