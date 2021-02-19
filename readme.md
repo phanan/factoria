@@ -31,6 +31,11 @@ define('User', faker => ({
   email: faker.internet.email(),
   age: faker.random.number({ min: 13, max: 99 })
 }))
+
+// TypeScript with generics
+define<User>('User', faker => ({
+  // A good editor/IDE should suggest properties from the User type
+}))
 ```
 
 ### 2. Generate model objects
@@ -59,9 +64,9 @@ const user = factory('User', {
   }
 })
 
-// Types with generics
-const user: User = factory<User>('User')
-const users: User[] = factory<User>('User', 3)
+// TypeScript with generics
+const user = factory<User>('User') // `user` is of type User
+const users: User[] = factory<User>('User', 3) // `users` is of type User[]
 ```
 
 ## Nested factories
@@ -112,7 +117,7 @@ Or, if [Jest](https://facebook.github.io/jest/) is your cup of tea:
 }
 ```
 
-Then in `test/setup.js` you can `require('factoria')` and add the model definitions there. factoria itself uses this approach for its tests.
+Then in `test/setup.js` you can import `factoria` and add the model definitions there.
 
 Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instance), with all model definitions registered:
 
@@ -136,6 +141,7 @@ import factory from './factory'
 const user = factory('User')
 ```
 
+factoria itself uses this approach for its tests.
 
 ## License
 

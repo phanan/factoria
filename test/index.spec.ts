@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect */
-import factory from '../index'
+import factory from './factory'
 
 const keys = <O extends Object> (obj: O): Array<keyof O> => {
   return Object.keys(obj) as Array<keyof O>

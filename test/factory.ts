@@ -8,3 +8,5 @@ factory.define<User>('user', (faker: Faker.FakerStatic) => ({
   id: faker.random.uuid(),
   manager: factory<User>('user')
 }))
+
+export default factory
