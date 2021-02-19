@@ -9,12 +9,14 @@ export default {
   external: ['faker'],
   output: [
     {
-      file: 'dist/factoria.min.js',
+      entryFileNames: 'factoria.min.js',
+      dir: 'dist',
       format: 'cjs',
       exports: 'auto',
       plugins: [terser()]
     }, {
-      file: 'dist/factoria.js',
+      entryFileNames: 'factoria.js',
+      dir: 'dist',
       format: 'cjs',
       exports: 'auto'
     }

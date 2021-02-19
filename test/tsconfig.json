@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "strict": true,
-    "module": "es2015",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -10,6 +8,6 @@
     "downlevelIteration": true
   },
   "include": [
-    "index.ts"
+    "./**/*.ts"
   ]
 }

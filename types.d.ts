@@ -1,4 +1,6 @@
-declare namespace Factoria {
+export declare namespace Factoria {
+  type Attributes = Record<string, any>
+
   type RecursivePartial<T> = {
     [P in keyof T]?:
       T[P] extends (infer U)[]

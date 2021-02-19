@@ -1,12 +1,11 @@
 import faker from 'faker'
 import deepmerge from 'deepmerge'
+import { Factoria } from './types'
 
-type Attributes = Record<string, any>
-
-const definitions: Record<string, (faker: Faker.FakerStatic) => Attributes> = {}
+const definitions: Record<string, (faker: Faker.FakerStatic) => Factoria.Attributes> = {}
 const isDictionary = (thingy: any) => Object.prototype.toString.call(thingy) === '[object Object]'
 
-const resolveOverrides = (overrides: Attributes): Object => {
+const resolveOverrides = (overrides: Factoria.RecursivePartial<any>): Object => {
   const props = Object.assign({}, overrides)
 
   for (const key in props) {
@@ -24,7 +23,18 @@ const resolveOverrides = (overrides: Attributes): Object => {
   return props
 }
 
-const factory = <T> (name: string, count: number | Attributes = 1, overrides: Attributes = {}): T | T[] => {
+function factory<T> (name: string): T
+function factory<T> (name: string, count: 1): T
+function factory<T> (name: string, count: number): T[]
+function factory<T> (name: string, overrides: Factoria.RecursivePartial<T>): T
+function factory<T> (name: string, count: 1, overrides: Factoria.RecursivePartial<T>): T
+function factory<T> (name: string, count: number, overrides: Factoria.RecursivePartial<T>): T[]
+
+function factory<T> (
+  name: string,
+  count: number | Factoria.RecursivePartial<T> = 1,
+  overrides: Factoria.RecursivePartial<T> = {}
+): T | T[] {
   if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
     throw new Error(`Model \`${name}\` not found.`)
   }
@@ -38,7 +48,7 @@ const factory = <T> (name: string, count: number | Attributes = 1, overrides: At
   return count === 1 ? generate() : Array.from(Array(count)).map(() => generate())
 }
 
-factory.define = (name: string, attributes: (faker: Faker.FakerStatic) => Attributes) => {
+factory.define = (name: string, attributes: (faker: Faker.FakerStatic) => Factoria.Attributes) => {
   definitions[name] = attributes
   return factory
 }
