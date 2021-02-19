@@ -156,9 +156,14 @@ var resolveOverrides = function (overrides) {
     }
     return props;
 };
-function factory(name, count, overrides) {
+// @ts-ignore
+var factory = function (name, count, overrides) {
     if (count === void 0) { count = 1; }
     if (overrides === void 0) { overrides = {}; }
+    factory.define = function (name, attributes) {
+        definitions[name] = attributes;
+        return factory;
+    };
     if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
         throw new Error("Model `" + name + "` not found.");
     }
@@ -167,10 +172,6 @@ function factory(name, count, overrides) {
     }
     var generate = function () { return cjs(definitions[name](faker__default['default']), resolveOverrides(overrides)); };
     return count === 1 ? generate() : Array.from(Array(count)).map(function () { return generate(); });
-}
-factory.define = function (name, attributes) {
-    definitions[name] = attributes;
-    return factory;
 };
 
 module.exports = factory;
