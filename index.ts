@@ -1,13 +1,12 @@
 import faker from 'faker'
 import deepmerge from 'deepmerge'
 
-type Overrides = Record<string, any>
+type Attributes = Record<string, any>
 
-const definitions: Record<string, (faker: Faker.FakerStatic) => object> = {}
-
+const definitions: Record<string, (faker: Faker.FakerStatic) => Attributes> = {}
 const isDictionary = (thingy: any) => Object.prototype.toString.call(thingy) === '[object Object]'
 
-const resolveOverrides = (overrides: Overrides): Object => {
+const resolveOverrides = (overrides: Attributes): Object => {
   const props = Object.assign({}, overrides)
 
   for (const key in props) {
@@ -25,8 +24,8 @@ const resolveOverrides = (overrides: Overrides): Object => {
   return props
 }
 
-const factory = <T> (name: string, count: number | Overrides = 1, overrides: Overrides = {}): T | T[] => {
-  if (!(name in definitions)) {
+const factory = <T> (name: string, count: number | Attributes = 1, overrides: Attributes = {}): T | T[] => {
+  if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
     throw new Error(`Model \`${name}\` not found.`)
   }
 
@@ -34,24 +33,12 @@ const factory = <T> (name: string, count: number | Overrides = 1, overrides: Ove
     return factory(name, 1, count)
   }
 
-  const generate = (): T => {
-    return deepmerge(definitions[name](faker), resolveOverrides(overrides)) as T
-  }
+  const generate = (): T => deepmerge(definitions[name](faker), resolveOverrides(overrides)) as T
 
-  if (count === 1) {
-    return generate()
-  }
-
-  const models = []
-
-  for (let i = 0; i < count; ++i) {
-    models.push(generate())
-  }
-
-  return models
+  return count === 1 ? generate() : Array.from(Array(count)).map(() => generate())
 }
 
-factory.define = (name: string, attributes: (faker: Faker.FakerStatic) => object) => {
+factory.define = (name: string, attributes: (faker: Faker.FakerStatic) => Attributes) => {
   definitions[name] = attributes
   return factory
 }

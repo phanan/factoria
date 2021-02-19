@@ -159,23 +159,14 @@ var resolveOverrides = function (overrides) {
 var factory = function (name, count, overrides) {
     if (count === void 0) { count = 1; }
     if (overrides === void 0) { overrides = {}; }
-    if (!(name in definitions)) {
+    if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
         throw new Error("Model `" + name + "` not found.");
     }
     if (typeof count !== 'number') {
         return factory(name, 1, count);
     }
-    var generate = function () {
-        return cjs(definitions[name](faker__default['default']), resolveOverrides(overrides));
-    };
-    if (count === 1) {
-        return generate();
-    }
-    var models = [];
-    for (var i = 0; i < count; ++i) {
-        models.push(generate());
-    }
-    return models;
+    var generate = function () { return cjs(definitions[name](faker__default['default']), resolveOverrides(overrides)); };
+    return count === 1 ? generate() : Array.from(Array(count)).map(function () { return generate(); });
 };
 factory.define = function (name, attributes) {
     definitions[name] = attributes;
