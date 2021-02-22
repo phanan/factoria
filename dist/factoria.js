@@ -141,6 +141,7 @@ var cjs = deepmerge_1;
 var _this = this;
 var definitions = {};
 var isDictionary = function (thingy) { return Object.prototype.toString.call(thingy) === '[object Object]'; };
+var appliedStates = [];
 var resolveOverrides = function (overrides) {
     var props = Object.assign({}, overrides);
     for (var key in props) {
@@ -156,21 +157,55 @@ var resolveOverrides = function (overrides) {
     }
     return props;
 };
+var generate = function (name, overrides, states) {
+    if (overrides === void 0) { overrides = {}; }
+    // back up the global applied states so that they won't tamper the recursive calls to sub-models (if any)
+    var statesBackup = appliedStates;
+    appliedStates = [];
+    var stateAttributes = {};
+    states.forEach(function (state) {
+        if (!Object.prototype.hasOwnProperty.call(definitions[name].states, state)) {
+            throw new Error("Model \"" + name + "\" has no \"" + state + "\" state.");
+        }
+        var stateDescriptor = definitions[name].states[state];
+        stateAttributes = cjs(stateAttributes, stateDescriptor instanceof Function ? stateDescriptor.call(_this, faker__default['default']) : stateDescriptor);
+    });
+    var result = cjs.all([
+        definitions[name].attributes(faker__default['default']),
+        stateAttributes,
+        resolveOverrides(overrides)
+    ]);
+    appliedStates = statesBackup;
+    return result;
+};
 // @ts-ignore
 var factory = function (name, count, overrides) {
     if (count === void 0) { count = 1; }
     if (overrides === void 0) { overrides = {}; }
     if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
-        throw new Error("Model `" + name + "` not found.");
+        throw new Error("Model \"" + name + "\" not found.");
     }
     if (typeof count !== 'number') {
         return factory(name, 1, count);
     }
-    var generate = function () { return cjs(definitions[name](faker__default['default']), resolveOverrides(overrides)); };
-    return count === 1 ? generate() : Array.from(Array(count)).map(function () { return generate(); });
+    var generated = count === 1
+        ? generate(name, overrides, appliedStates)
+        : Array.from(Array(count)).map(function () { return generate(name, overrides, appliedStates); });
+    // Reset the currently applied states so that the next factory() call won't be tampered
+    appliedStates = [];
+    return generated;
 };
-factory.define = function (name, attributes) {
-    definitions[name] = attributes;
+factory.states = function () {
+    var states = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        states[_i] = arguments[_i];
+    }
+    appliedStates = states;
+    return factory;
+};
+factory.define = function (name, attributes, states) {
+    if (states === void 0) { states = {}; }
+    definitions[name] = { attributes: attributes, states: states };
     return factory;
 };
 

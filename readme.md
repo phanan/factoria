@@ -95,6 +95,44 @@ Calling `factory('User')` will generate an object of the expected shape e.g.,
 }
 ```
 
+## States
+
+States allow you to define modifications that can be applied to your model factories. To create states, add an object as the third parameter of `factory.define`, where the key being the state name and its value the state's attributes. For example, you can add an `unverified` state for a User model this way:
+
+```ts
+factory.define('User', faker => ({
+  email: faker.internet.email(),
+  verified: true
+}), {
+  verified: false
+})
+```
+
+State attributes can also be a function with Faker as the sole argument:
+
+```ts
+factory.define('User', faker => ({
+  email: faker.internet.email(),
+  verified: true
+}), {
+  unverified: faker => ({
+    verified: faker.random.arrayElement([false]) // for the sake of demonstration
+  })
+})
+```
+
+You can then apply the state by calling the method `states()` with the state name, which returns the factoria instance itself:
+
+```ts
+const unverifiedUser = factory.states('unverified')('User')
+```
+
+You can also apply multiple states:
+
+```ts
+const fourUnverifiedAsians = factory.states('vietnamese', 'japanese', 'unverified')('User', 4)
+```
+
 ## Test setup tips
 
 Often, you want to set up all model definitions before running the tests. One way to do so is to have one entry point for the factories during test setup. For example, you can have this `test` script defined in `package.json`:
