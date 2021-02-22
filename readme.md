@@ -104,7 +104,9 @@ factory.define('User', faker => ({
   email: faker.internet.email(),
   verified: true
 }), {
-  verified: false
+  unverified: {
+    verified: false
+  }
 })
 ```
 
