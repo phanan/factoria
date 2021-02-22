@@ -132,7 +132,7 @@ const unverifiedUser = factory.states('unverified')('User')
 You can also apply multiple states:
 
 ```ts
-const fourUnverifiedAsians = factory.states('vietnamese', 'japanese', 'unverified')('User', 4)
+const fourUnverifiedPoorSouls = factory.states('job:engineer', 'unverified')('User', 4)
 ```
 
 ## Test setup tips
