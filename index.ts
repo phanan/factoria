@@ -1,5 +1,6 @@
 import faker from 'faker'
 import deepmerge from 'deepmerge'
+import { isPlainObject } from 'is-plain-object'
 import { Factoria } from './types'
 
 const definitions: Record<string, {
@@ -53,7 +54,7 @@ const generate = <T>(name: string, overrides: Factoria.Overrides<T> = {}, states
     definitions[name].attributes(faker),
     stateAttributes,
     resolveOverrides<T>(overrides)
-  ]) as unknown as T
+  ], { isMergeableObject: isPlainObject }) as unknown as T
 
   appliedStates = statesBackup
 
