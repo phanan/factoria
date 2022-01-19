@@ -1,9 +1,10 @@
-import faker from 'faker'
+import faker from '@faker-js/faker'
+import Faker from '@faker-js/faker/lib'
 import deepmerge from 'deepmerge'
 import { Factoria } from './types'
 
 const definitions: Record<string, {
-  attributes: (faker: Faker.FakerStatic) => Factoria.Attributes,
+  attributes: (faker: Faker) => Factoria.Attributes,
   states: Record<string, Factoria.StateDefinition>
 }> = {}
 
@@ -91,7 +92,7 @@ factory.states = (...states) => {
 
 factory.define = <T> (
   name: string,
-  attributes: (faker: Faker.FakerStatic) => Factoria.Overrides<T>,
+  attributes: (faker: Faker) => Factoria.Overrides<T>,
   states: Record<string, Factoria.StateDefinition> = {}
 ) => {
   definitions[name] = { attributes, states }

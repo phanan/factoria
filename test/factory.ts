@@ -1,7 +1,7 @@
 import factory from '../index'
 
 factory.define<User>('user', faker => ({
-  id: faker.random.uuid(),
+  id: faker.datatype.uuid(),
   name: faker.name.findName(),
   email: faker.internet.email(),
   verified: true
@@ -15,7 +15,7 @@ factory.define<User>('user', faker => ({
 })
 
 factory.define<Company>('company', faker => ({
-  id: faker.random.uuid(),
+  id: faker.datatype.uuid(),
   manager: factory('user')
 }), {
   hasUnverifiedManager: faker => ({
