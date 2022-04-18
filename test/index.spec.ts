@@ -1,5 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import factory from './factory'
+import { Faker } from '@faker-js/faker';
 
 const keys = <O extends Object> (obj: O): Array<keyof O> => {
   return Object.keys(obj) as Array<keyof O>
@@ -38,7 +39,7 @@ describe('basic functionalities', () => {
   })
 
   it('supports functions as property overrides', () => {
-    assertUser(factory<User>('user', { email: (faker: Faker.FakerStatic) => 'foo@bar.net' }), {
+    assertUser(factory<User>('user', { email: (faker: Faker) => 'foo@bar.net' }), {
       email: 'foo@bar.net'
     })
   })
@@ -59,7 +60,7 @@ describe('basic functionalities', () => {
   it('supports nested attributes with function overrides', () => {
     const company = factory<Company>('company', {
       manager: {
-        name: (faker: Faker.FakerStatic) => faker.fake('Bob the CEO')
+        name: (faker: Faker) => faker.fake('Bob the CEO')
       }
     })
     assertUser(company.manager, { name: 'Bob the CEO' })
