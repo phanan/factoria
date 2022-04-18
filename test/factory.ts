@@ -1,7 +1,8 @@
+import { Faker } from '@faker-js/faker'
 import factory from '../index'
 
-factory.define<User>('user', faker => ({
-  id: faker.random.uuid(),
+factory.define<User>('user', (faker: Faker) => ({
+  id: faker.datatype.uuid(),
   name: faker.name.findName(),
   email: faker.internet.email(),
   verified: true
@@ -9,16 +10,16 @@ factory.define<User>('user', faker => ({
   unverified: {
     verified: false
   },
-  alwaysBob: faker => ({
+  alwaysBob: (faker: Faker) => ({
     name: faker.fake('Bob the Boss')
   })
 })
 
-factory.define<Company>('company', faker => ({
-  id: faker.random.uuid(),
+factory.define<Company>('company', (faker: Faker) => ({
+  id: faker.datatype.uuid(),
   manager: factory('user')
 }), {
-  hasUnverifiedManager: faker => ({
+  hasUnverifiedManager: (faker: Faker) => ({
     manager: {
       verified: faker.random.arrayElement([false])
     }
