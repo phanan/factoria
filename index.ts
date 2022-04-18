@@ -1,18 +1,22 @@
-import faker from 'faker'
+import faker, { Faker } from '@faker-js/faker'
 import deepmerge from 'deepmerge'
-import { isPlainObject } from 'is-plain-object'
+import isPlainObject from 'is-plain-object'
 import { Factoria } from './types'
 
-const definitions: Record<string, {
-  attributes: (faker: Faker.FakerStatic) => Factoria.Attributes,
-  states: Record<string, Factoria.StateDefinition>
-}> = {}
+const definitions: Record<
+  string,
+  {
+    attributes: (faker: Faker) => Factoria.Attributes
+    states: Record<string, Factoria.StateDefinition>
+  }
+> = {}
 
-const isDictionary = (thingy: any) => Object.prototype.toString.call(thingy) === '[object Object]'
+const isDictionary = (thingy: any) =>
+  Object.prototype.toString.call(thingy) === '[object Object]'
 
 let appliedStates: string[] = []
 
-const resolveOverrides = <T> (overrides: Factoria.Overrides<T>): Object => {
+const resolveOverrides = <T>(overrides: Factoria.Overrides<T>): Object => {
   const props = Object.assign({}, overrides) as Factoria.Attributes
 
   for (const key in props) {
@@ -30,15 +34,21 @@ const resolveOverrides = <T> (overrides: Factoria.Overrides<T>): Object => {
   return props
 }
 
-const generate = <T>(name: string, overrides: Factoria.Overrides<T> = {}, states: string[]): T => {
+const generate = <T>(
+  name: string,
+  overrides: Factoria.Overrides<T> = {},
+  states: string[],
+): T => {
   // back up the global applied states so that they won't tamper the recursive calls to sub-models (if any)
   const statesBackup = appliedStates
   appliedStates = []
 
   let stateAttributes = {}
 
-  states.forEach(state => {
-    if (!Object.prototype.hasOwnProperty.call(definitions[name].states, state)) {
+  states.forEach((state) => {
+    if (
+      !Object.prototype.hasOwnProperty.call(definitions[name].states, state)
+    ) {
       throw new Error(`Model "${name}" has no "${state}" state.`)
     }
 
@@ -46,15 +56,20 @@ const generate = <T>(name: string, overrides: Factoria.Overrides<T> = {}, states
 
     stateAttributes = deepmerge(
       stateAttributes,
-      stateDescriptor instanceof Function ? stateDescriptor.call(this, faker) : stateDescriptor
+      stateDescriptor instanceof Function
+        ? stateDescriptor.call(this, faker)
+        : stateDescriptor
     )
   })
 
-  const result = deepmerge.all([
-    definitions[name].attributes(faker),
-    stateAttributes,
-    resolveOverrides<T>(overrides)
-  ], { isMergeableObject: isPlainObject }) as unknown as T
+  const result = deepmerge.all(
+    [
+      definitions[name].attributes(faker),
+      stateAttributes,
+      resolveOverrides<T>(overrides)
+    ],
+    { isMergeableObject: isPlainObject }
+  ) as unknown as T
 
   appliedStates = statesBackup
 
@@ -62,7 +77,7 @@ const generate = <T>(name: string, overrides: Factoria.Overrides<T> = {}, states
 }
 
 // @ts-ignore
-const factory: Factoria.Factoria = <T> (
+const factory: Factoria.Factoria = <T>(
   name: string,
   count: number | Factoria.Overrides<T> = 1,
   overrides: Factoria.Overrides<T> = {}
@@ -75,9 +90,12 @@ const factory: Factoria.Factoria = <T> (
     return factory(name, 1, count)
   }
 
-  const generated = count === 1
-    ? generate(name, overrides, appliedStates)
-    : Array.from(Array(count)).map(() => generate(name, overrides, appliedStates))
+  const generated =
+    count === 1
+      ? generate(name, overrides, appliedStates)
+      : Array.from(Array(count)).map(() =>
+        generate(name, overrides, appliedStates)
+      )
 
   // Reset the currently applied states so that the next factory() call won't be tampered
   appliedStates = []
@@ -90,10 +108,10 @@ factory.states = (...states) => {
   return factory
 }
 
-factory.define = <T> (
+factory.define = <T>(
   name: string,
-  attributes: (faker: Faker.FakerStatic) => Factoria.Overrides<T>,
-  states: Record<string, Factoria.StateDefinition> = {}
+  attributes: (faker: Faker) => Factoria.Overrides<T>,
+  states: Record<string, Factoria.StateDefinition> = {},
 ) => {
   definitions[name] = { attributes, states }
   return factory

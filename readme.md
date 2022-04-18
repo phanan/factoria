@@ -8,7 +8,7 @@ Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Mod
 # install factoria
 $ yarn add factoria -D
 # install Faker as a peer dependency
-$ yarn add faker -D
+$ yarn add @faker-js/faker -D
 ```
 
 ## Usage
