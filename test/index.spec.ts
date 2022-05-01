@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import factory from './factory'
-import Faker from '@faker-js/faker/lib'
+import { Faker } from '@faker-js/faker'
 
 const keys = <O extends Object> (obj: O): Array<keyof O> => {
   return Object.keys(obj) as Array<keyof O>

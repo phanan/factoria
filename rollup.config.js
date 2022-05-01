@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 export default {
   input: 'index.ts',
   context: 'this',
-  external: ['faker'],
+  external: ['@faker-js/faker'],
   output: [
     {
       entryFileNames: 'factoria.min.js',

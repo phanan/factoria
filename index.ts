@@ -1,5 +1,4 @@
-import faker from '@faker-js/faker'
-import Faker from '@faker-js/faker/lib'
+import { Faker, faker } from '@faker-js/faker'
 import deepmerge from 'deepmerge'
 import { Factoria } from './types'
 

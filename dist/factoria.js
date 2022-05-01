@@ -1,10 +1,6 @@
 'use strict';
 
-var faker = require('faker');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var faker__default = /*#__PURE__*/_interopDefaultLegacy(faker);
+var faker = require('@faker-js/faker');
 
 var isMergeableObject = function isMergeableObject(value) {
 	return isNonNullObject(value)
@@ -149,7 +145,7 @@ var resolveOverrides = function (overrides) {
             continue;
         }
         if (props[key] instanceof Function) {
-            props[key] = props[key].call(_this, faker__default['default']);
+            props[key] = props[key].call(_this, faker.faker);
         }
         else if (isDictionary(props[key])) {
             props[key] = resolveOverrides(props[key]);
@@ -168,10 +164,10 @@ var generate = function (name, overrides, states) {
             throw new Error("Model \"" + name + "\" has no \"" + state + "\" state.");
         }
         var stateDescriptor = definitions[name].states[state];
-        stateAttributes = cjs(stateAttributes, stateDescriptor instanceof Function ? stateDescriptor.call(_this, faker__default['default']) : stateDescriptor);
+        stateAttributes = cjs(stateAttributes, stateDescriptor instanceof Function ? stateDescriptor.call(_this, faker.faker) : stateDescriptor);
     });
     var result = cjs.all([
-        definitions[name].attributes(faker__default['default']),
+        definitions[name].attributes(faker.faker),
         stateAttributes,
         resolveOverrides(overrides)
     ]);
