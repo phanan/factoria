@@ -18,7 +18,7 @@ $ yarn add @faker-js/faker -D
 To define a model, import and use `define` from the module. `define` accepts two arguments:
 
 * `name`: (string) Name of the model, e.g. `'user'`
-* `(faker)` (function) A closure to return the model's attribute definition as an object. This closure will receive a [Faker](https://github.com/Marak/faker.js/) instance, which allows you to generate various random testing data.
+* `(faker)` (function) A closure to return the model's attribute definition as an object. This closure will receive a [Faker](https://fakerjs.dev) instance, which allows you to generate various random testing data.
 
 Example:
 
