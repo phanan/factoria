@@ -1,6 +1,6 @@
 # factoria ![Main](https://github.com/phanan/factoria/workflows/Main/badge.svg) ![npm](https://img.shields.io/npm/v/factoria)
 
-Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/5.5/database-testing#writing-factories).
+Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/master/database-testing#defining-model-factories).
 
 ## Install
 
