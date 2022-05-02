@@ -11,8 +11,8 @@ const isDictionary = (thingy: any) => Object.prototype.toString.call(thingy) ===
 
 let appliedStates: string[] = []
 
-const resolveOverrides = <T> (overrides: Factoria.Overrides<T>): Object => {
-  const props = Object.assign({}, overrides) as Factoria.Attributes
+const resolveOverrides = <T> (overrides: Factoria.Overrides<T>): Record<string, any> => {
+  const props: Factoria.Attributes = Object.assign({}, overrides)
 
   for (const key in props) {
     if (!Object.prototype.hasOwnProperty.call(props, key)) {

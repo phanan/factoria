@@ -2,7 +2,7 @@ import { Faker } from '@faker-js/faker'
 
 export declare namespace Factoria {
   type Attributes = Record<string, any>
-  type Overrides<T> = Partial<{ [P in keyof T]: Overrides<T[P]> }> | ((faker: Faker) => any)
+  type Overrides<T> = Partial<{ [P in keyof T]: Overrides<T[P]> | null }> | ((faker: Faker) => any)
   type StateDefinition = ((faker: Faker) => Factoria.Attributes) | Attributes
 
   type Factoria = {
