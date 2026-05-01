@@ -1,208 +1,153 @@
-'use strict';
-
-var faker = require('@faker-js/faker');
-
-var isMergeableObject = function isMergeableObject(value) {
-	return isNonNullObject(value)
-		&& !isSpecial(value)
-};
-
-function isNonNullObject(value) {
-	return !!value && typeof value === 'object'
+import { faker } from "@faker-js/faker";
+const definitions = {};
+var l = {};
+function s(e) {
+  return T(e);
 }
-
-function isSpecial(value) {
-	var stringValue = Object.prototype.toString.call(value);
-
-	return stringValue === '[object RegExp]'
-		|| stringValue === '[object Date]'
-		|| isReactElement(value)
+function T(e) {
+  return e instanceof Map;
 }
-
-// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
-var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
-
-function isReactElement(value) {
-	return value.$$typeof === REACT_ELEMENT_TYPE
+function u(e) {
+  return j(e);
 }
-
-function emptyTarget(val) {
-	return Array.isArray(val) ? [] : {}
+function j(e) {
+  return e instanceof Set;
 }
-
-function cloneUnlessOtherwiseSpecified(value, options) {
-	return (options.clone !== false && options.isMergeableObject(value))
-		? deepmerge(emptyTarget(value), value, options)
-		: value
+function o(e) {
+  return !!e && e.constructor === Object;
 }
-
-function defaultArrayMerge(target, source, options) {
-	return target.concat(source).map(function(element) {
-		return cloneUnlessOtherwiseSpecified(element, options)
-	})
+function b(e) {
+  return Object.keys(e);
 }
-
-function getMergeFunction(key, options) {
-	if (!options.customMerge) {
-		return deepmerge
-	}
-	var customMerge = options.customMerge(key);
-	return typeof customMerge === 'function' ? customMerge : deepmerge
-}
-
-function getEnumerableOwnPropertySymbols(target) {
-	return Object.getOwnPropertySymbols
-		? Object.getOwnPropertySymbols(target).filter(function(symbol) {
-			return target.propertyIsEnumerable(symbol)
-		})
-		: []
-}
-
-function getKeys(target) {
-	return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
-}
-
-function propertyIsOnObject(object, property) {
-	try {
-		return property in object
-	} catch(_) {
-		return false
-	}
-}
-
-// Protects from prototype poisoning and unexpected merging up the prototype chain.
-function propertyIsUnsafe(target, key) {
-	return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
-		&& !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
-			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
-}
-
-function mergeObject(target, source, options) {
-	var destination = {};
-	if (options.isMergeableObject(target)) {
-		getKeys(target).forEach(function(key) {
-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
-		});
-	}
-	getKeys(source).forEach(function(key) {
-		if (propertyIsUnsafe(target, key)) {
-			return
-		}
-
-		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
-		} else {
-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
-		}
-	});
-	return destination
-}
-
-function deepmerge(target, source, options) {
-	options = options || {};
-	options.arrayMerge = options.arrayMerge || defaultArrayMerge;
-	options.isMergeableObject = options.isMergeableObject || isMergeableObject;
-	// cloneUnlessOtherwiseSpecified is added to `options` so that custom arrayMerge()
-	// implementations can use it. The caller may not replace it.
-	options.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;
-
-	var sourceIsArray = Array.isArray(source);
-	var targetIsArray = Array.isArray(target);
-	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
-
-	if (!sourceAndTargetTypesMatch) {
-		return cloneUnlessOtherwiseSpecified(source, options)
-	} else if (sourceIsArray) {
-		return options.arrayMerge(target, source, options)
-	} else {
-		return mergeObject(target, source, options)
-	}
-}
-
-deepmerge.all = function deepmergeAll(array, options) {
-	if (!Array.isArray(array)) {
-		throw new Error('first argument should be an array')
-	}
-
-	return array.reduce(function(prev, next) {
-		return deepmerge(prev, next, options)
-	}, {})
-};
-
-var deepmerge_1 = deepmerge;
-
-var cjs = deepmerge_1;
-
-var _this = this;
-var definitions = {};
-var isDictionary = function (thingy) { return Object.prototype.toString.call(thingy) === '[object Object]'; };
-var appliedStates = [];
-var resolveOverrides = function (overrides) {
-    var props = Object.assign({}, overrides);
-    for (var key in props) {
-        if (!Object.prototype.hasOwnProperty.call(props, key)) {
-            continue;
+function M(e, y, ...f) {
+  let i = l;
+  for (let c of [e, y, ...f]) {
+    if (!o(c)) throw new TypeError("Expected all arguments to be object literals.");
+    let r = { ...i }, p = b(c);
+    for (let a of p) {
+      let n = r[a], t = c[a];
+      if (n !== t) {
+        if (o(n) && o(t)) {
+          r[a] = M(n, t);
+          continue;
         }
-        if (props[key] instanceof Function) {
-            props[key] = props[key].call(_this, faker.faker);
+        if (Array.isArray(n) && Array.isArray(t)) {
+          r[a] = [.../* @__PURE__ */ new Set([...n, ...t])];
+          continue;
         }
-        else if (isDictionary(props[key])) {
-            props[key] = resolveOverrides(props[key]);
+        if (s(n) && s(t)) {
+          r[a] = new Map([...n, ...t]);
+          continue;
         }
+        if (u(n) && u(t)) {
+          r[a] = /* @__PURE__ */ new Set([...n, ...t]);
+          continue;
+        }
+        r[a] = t;
+      }
     }
-    return props;
+    i = r;
+  }
+  return i;
+}
+const isDictionary = (thingy) => Object.prototype.toString.call(thingy) === "[object Object]";
+function assertCount(value) {
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1) {
+    throw new Error("factoria: count must be a positive integer.");
+  }
+}
+const resolveAttributes = (attrs) => {
+  const props = Object.assign({}, attrs);
+  for (const key in props) {
+    if (!Object.prototype.hasOwnProperty.call(props, key)) {
+      continue;
+    }
+    if (props[key] instanceof Builder) {
+      props[key] = props[key].make();
+    } else if (props[key] instanceof Function) {
+      props[key] = props[key].call(void 0, faker);
+    } else if (isDictionary(props[key])) {
+      props[key] = resolveAttributes(props[key]);
+    }
+  }
+  return props;
 };
-var generate = function (name, overrides, states) {
-    if (overrides === void 0) { overrides = {}; }
-    // back up the global applied states so that they won't tamper the recursive calls to sub-models (if any)
-    var statesBackup = appliedStates;
-    appliedStates = [];
-    var stateAttributes = {};
-    states.forEach(function (state) {
-        if (!Object.prototype.hasOwnProperty.call(definitions[name].states, state)) {
-            throw new Error("Model \"" + name + "\" has no \"" + state + "\" state.");
-        }
-        var stateDescriptor = definitions[name].states[state];
-        stateAttributes = cjs(stateAttributes, stateDescriptor instanceof Function ? stateDescriptor.call(_this, faker.faker) : stateDescriptor);
-    });
-    var result = cjs.all([
-        definitions[name].attributes(faker.faker),
-        stateAttributes,
-        resolveOverrides(overrides)
-    ]);
-    appliedStates = statesBackup;
-    return result;
+const generate = (name, overrides, states) => {
+  let stateAttributes = {};
+  states.forEach((state) => {
+    if (!Object.prototype.hasOwnProperty.call(definitions[name].states, state)) {
+      throw new Error(`factoria: Model "${name}" has no "${state}" state.`);
+    }
+    const stateDescriptor = definitions[name].states[state];
+    stateAttributes = M(
+      stateAttributes,
+      stateDescriptor instanceof Function ? stateDescriptor.call(void 0, faker) : stateDescriptor
+    );
+  });
+  return M(
+    resolveAttributes(definitions[name].attributes(faker)),
+    resolveAttributes(stateAttributes),
+    resolveAttributes(overrides)
+  );
 };
-// @ts-ignore
-var factory = function (name, count, overrides) {
-    if (count === void 0) { count = 1; }
-    if (overrides === void 0) { overrides = {}; }
+class Builder {
+  constructor(name) {
+    this.name = name;
+    this.appliedStates = [];
     if (!Object.prototype.hasOwnProperty.call(definitions, name)) {
-        throw new Error("Model \"" + name + "\" not found.");
+      throw new Error(`factoria: Model "${name}" not found.`);
     }
-    if (typeof count !== 'number') {
-        return factory(name, 1, count);
+  }
+  state(...names) {
+    this.appliedStates.push(...names);
+    return this;
+  }
+  count(n) {
+    assertCount(n);
+    this.requestedCount = n;
+    return this;
+  }
+  make(overridesOrCount, count) {
+    let overrides = {};
+    let n = this.requestedCount || 1;
+    if (typeof overridesOrCount === "number" && count !== void 0) {
+      throw new Error("factoria: make(): count cannot be passed twice.");
     }
-    var generated = count === 1
-        ? generate(name, overrides, appliedStates)
-        : Array.from(Array(count)).map(function () { return generate(name, overrides, appliedStates); });
-    // Reset the currently applied states so that the next factory() call won't be tampered
-    appliedStates = [];
-    return generated;
-};
-factory.states = function () {
-    var states = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        states[_i] = arguments[_i];
+    const countPassedToMake = typeof overridesOrCount === "number" || count !== void 0;
+    if (this.requestedCount !== void 0 && countPassedToMake) {
+      console.warn(`factoria: count was already set to ${this.requestedCount} via .count(); the count passed to make() will override it.`);
     }
-    appliedStates = states;
-    return factory;
+    if (typeof overridesOrCount === "number") {
+      assertCount(overridesOrCount);
+      n = overridesOrCount;
+    } else if (overridesOrCount !== void 0) {
+      if (!isDictionary(overridesOrCount) && typeof overridesOrCount !== "function") {
+        throw new Error("factoria: make(): overrides must be an object or a function.");
+      }
+      overrides = overridesOrCount;
+    }
+    if (count !== void 0) {
+      assertCount(count);
+      n = count;
+    }
+    if (n === 1) {
+      return generate(this.name, overrides, this.appliedStates);
+    }
+    return Array.from(
+      { length: n },
+      () => generate(this.name, overrides, this.appliedStates)
+    );
+  }
+}
+const factory = (name) => new Builder(name);
+factory.define = (name, attributes, states = {}) => {
+  definitions[name] = { attributes, states };
+  return factory;
 };
-factory.define = function (name, attributes, states) {
-    if (states === void 0) { states = {}; }
-    definitions[name] = { attributes: attributes, states: states };
-    return factory;
+factory.seed = (value) => {
+  faker.seed(value);
+  return factory;
 };
-
-module.exports = factory;
+export {
+  factory as default
+};

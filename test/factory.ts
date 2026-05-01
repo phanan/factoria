@@ -1,8 +1,8 @@
-import factory from '../index'
+import factory from '../src'
 
-factory.define<User>('user', faker => ({
-  id: faker.datatype.uuid(),
-  name: faker.name.findName(),
+factory.define('user', faker => ({
+  id: faker.string.uuid(),
+  name: faker.person.fullName(),
   email: faker.internet.email(),
   verified: true
 }), {
@@ -10,17 +10,17 @@ factory.define<User>('user', faker => ({
     verified: false
   },
   alwaysBob: faker => ({
-    name: faker.fake('Bob the Boss')
+    name: faker.helpers.fake('Bob the Boss')
   })
 })
 
-factory.define<Company>('company', faker => ({
-  id: faker.datatype.uuid(),
+factory.define('company', faker => ({
+  id: faker.string.uuid(),
   manager: factory('user')
 }), {
   hasUnverifiedManager: faker => ({
     manager: {
-      verified: faker.random.arrayElement([false])
+      verified: faker.helpers.arrayElement([false])
     }
   })
 })

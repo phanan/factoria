@@ -1,8 +1,9 @@
 {
   "name": "factoria",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Simplistic model factory for Node/JavaScript",
   "license": "MIT",
+  "type": "module",
   "repository": "phanan/factoria",
   "author": {
     "name": "Phan An",
@@ -12,12 +13,20 @@
   "scripts": {
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch",
-    "test": "jest",
-    "build": "rollup -c"
+    "type-check:watch": "pnpm type-check -- --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "vite build && pnpm build:types",
+    "build:types": "dts-bundle-generator -o dist/factoria.d.ts src/index.ts --no-banner"
   },
-  "main": "dist/factoria.js",
-  "types": "./types.d.ts",
+  "main": "./dist/factoria.js",
+  "types": "./dist/factoria.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/factoria.d.ts",
+      "import": "./dist/factoria.js"
+    }
+  },
   "keywords": [
     "model",
     "factory",
@@ -25,44 +34,30 @@
     "dummy",
     "schema"
   ],
-  "peerDepedencies": {
-    "@faker-js/faker": "^6.0.0-alpha.3"
+  "packageManager": "pnpm@10.20.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "peerDependencies": {
+    "@faker-js/faker": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-typescript": "^7.9.0",
-    "@faker-js/faker": "^6.0.0-alpha.3",
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^11.1.1",
-    "@rollup/plugin-typescript": "^4.1.1",
-    "@types/jest": "^26.0.20",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "deepmerge": "^4.2.2",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.8.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "husky": "^5.0.9",
-    "jest": "^26.6.3",
-    "lint-staged": "^10.5.4",
-    "rollup": "^2.38.5",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^26.5.1",
-    "tslib": "^1.11.1",
-    "typescript": "^4.1.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "@faker-js/faker": "^9.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "dts-bundle-generator": "^9.5.1",
+    "object-deep-merge": "^2.0.0",
+    "eslint": "^9.39.4",
+    "neostandard": "^0.13.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "tslib": "^2.7.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.2"
   },
   "lint-staged": {
-    "**/*.ts": "yarn lint"
+    "**/*.ts": "pnpm lint"
   }
 }
