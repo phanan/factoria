@@ -1,98 +1,103 @@
-# factoria ![Main](https://github.com/phanan/factoria/workflows/Main/badge.svg) ![npm](https://img.shields.io/npm/v/factoria)
+# factoria ![Main](https://github.com/phanan/factoria/workflows/Main/badge.svg) ![npm](https://img.shields.io/npm/v/factoria) ![bundle size](https://img.shields.io/bundlephobia/minzip/factoria?label=gzip)
 
-Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/master/database-testing#defining-model-factories).
+A tiny model factory for Node and TypeScript — **1.07&nbsp;kB gzipped**, zero runtime deps beyond Faker. Heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/master/database-testing#model-factories).
 
 ## Install
 
 ```bash
 # install factoria
-$ yarn add factoria -D
+$ pnpm add -D factoria
 # install Faker as a peer dependency
-$ yarn add @faker-js/faker -D
+$ pnpm add -D @faker-js/faker
 ```
 
 ## Usage
 
 ### 1. Define a model
 
-To define a model, import and use `define` from the module. `define` accepts two arguments:
+To define a model, import the default export and call `.define()` on it. `define` accepts two arguments:
 
 * `name`: (string) Name of the model, e.g. `'user'`
-* `(faker)` (function) A closure to return the model's attribute definition as an object. This closure will receive a [Faker](https://fakerjs.dev) instance, which allows you to generate various random testing data.
+* `(faker)` (function) A closure that returns the model's attribute definition as an object. The closure receives a [Faker](https://fakerjs.dev) instance to generate random testing data.
 
 Example:
 
 ```ts
-const define = require('factoria').define
+import factory from 'factoria'
 
-define('User', faker => ({
-  id: faker.random.uuid(),
-  name: faker.name.findName(),
+factory.define('user', faker => ({
+  id: faker.string.uuid(),
+  name: faker.person.fullName(),
   email: faker.internet.email(),
-  age: faker.random.number({ min: 13, max: 99 })
+  age: faker.number.int({ min: 13, max: 99 }),
 }))
 
 // TypeScript with generics
-define<User>('User', faker => ({
-  // A good editor/IDE should suggest properties from the User type
+factory.define<User>('user', faker => ({
+  // A good editor/IDE will suggest properties from the User type
 }))
 ```
 
 ### 2. Generate model objects
 
-To generate model objects, import the factory and call it with the model's defined name. Following the previous example:
+`factory(name)` returns a builder. Chain `state()`, `count()`, and finally `make()` to materialize the model(s):
 
 ```ts
 import factory from 'factoria'
 
 // The simplest case, returns a "User" object
-const user = factory('User')
+const user = factory<User>('user').make()
 
 // Generate a "User" object with "email" preset to "foo@bar.baz"
-const userWithSetEmail = factory('User', { email: 'foo@bar.baz' })
+const userWithPresetEmail = factory<User>('user').make({ email: 'foo@bar.baz' })
 
 // Generate an array of 5 "User" objects
-const users = factory('User', 5)
+const users = factory<User>('user').count(5).make()
+
+// Same thing, shorter — make() also accepts a count
+const moreUsers = factory<User>('user').make(5)
 
 // Generate an array of 5 "User" objects, each with "age" preset to 27
-const usersWithSetAge = factory('User', 5, { age: 27 })
+const usersWithPresetAge = factory<User>('user').make({ age: 27 }, 5)
 
 // Use a function as an overriding value. The function will receive a Faker instance.
-const user = factory('User', {
-  name: faker => {
-    return faker.name.findName() + ' Jr.'
-  }
+const userJunior = factory<User>('user').make({
+  name: faker => `${faker.person.fullName()} Jr.`
 })
-
-// TypeScript with generics
-const user = factory<User>('User') // `user` is of type User
-const users: User[] = factory<User>('User', 3) // `users` is of type User[]
 ```
 
 ## Nested factories
 
-factoria fully supports nested factories. For example, if you have a `Role` and a `User` model, the setup might look like this:
+factoria fully supports nested factories. For example, if you have a `role` and a `user` model, the setup might look like this:
 
 ```ts
 import factory from 'factoria'
 
-factory.define('Role', faker => {
-  name: faker.random.arrayElement(['user', 'manager', 'admin'])
-}).define('User', faker => ({
+factory.define('role', faker => ({
+  name: faker.helpers.arrayElement(['user', 'manager', 'admin']),
+})).define('user', faker => ({
   email: faker.internet.email(),
-  role: factory('Role')
+  role: factory('role'),
 }))
 ```
 
-Calling `factory('User')` will generate an object of the expected shape e.g.,
+Calling `factory<User>('user').make()` will produce something like this:
 
 ```js
 {
   email: 'foo@bar.com',
   role: {
-    name: 'admin'
-  }
+    name: 'admin',
+  },
 }
+```
+
+You can pass a builder as an override too — useful for picking a state for the nested model:
+
+```ts
+factory('user').make({
+  role: factory('role').state('admin'),
+})
 ```
 
 ## States
@@ -100,7 +105,7 @@ Calling `factory('User')` will generate an object of the expected shape e.g.,
 States allow you to define modifications that can be applied to your model factories. To create states, add an object as the third parameter of `factory.define`, where the key being the state name and its value the state's attributes. For example, you can add an `unverified` state for a User model this way:
 
 ```ts
-factory.define('User', faker => ({
+factory.define('user', faker => ({
   email: faker.internet.email(),
   verified: true
 }), {
@@ -113,75 +118,89 @@ factory.define('User', faker => ({
 State attributes can also be a function with Faker as the sole argument:
 
 ```ts
-factory.define('User', faker => ({
+factory.define('user', faker => ({
   email: faker.internet.email(),
   verified: true
 }), {
   unverified: faker => ({
-    verified: faker.random.arrayElement([false]) // for the sake of demonstration
+    verified: faker.helpers.arrayElement([false]) // for the sake of demonstration
   })
 })
 ```
 
-You can then apply the state by calling the method `states()` with the state name, which returns the factoria instance itself:
+Apply a state by calling `state()` on the builder:
 
 ```ts
-const unverifiedUser = factory.states('unverified')('User')
+const unverifiedUser = factory<User>('user').state('unverified').make()
 ```
 
-You can also apply multiple states:
+`state()` is variadic and chainable, so multiple states can be applied either way:
 
 ```ts
-const fourUnverifiedPoorSouls = factory.states('job:engineer', 'unverified')('User', 4)
+const fourUnverifiedPoorSouls = factory<User>('user')
+  .state('job:engineer', 'unverified')
+  .make(4)
+
+// equivalent
+factory<User>('user').state('job:engineer').state('unverified').make(4)
 ```
 
-## Test setup tips
+## Type-safe model names
 
-Often, you want to set up all model definitions before running the tests. One way to do so is to have one entry point for the factories during test setup. For example, you can have this `test` script defined in `package.json`:
+By default, `factory(name)` accepts any string and you pass the model type via an explicit generic (`factory<User>('user')`).
+For projects with a fixed set of models, you can opt into name-based inference by augmenting the `Factoria.ModelRegistry`
+interface once. After that, names autocomplete and `make()` returns the right type without the generic.
 
-```json
-{
-  "test": "mocha-webpack --require test/setup.js tests/**/*.spec.js"
-}
-```
-
-Or, if [Jest](https://facebook.github.io/jest/) is your cup of tea:
-
-```json
-{
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.js"
-    ]
-  }
-}
-```
-
-Then in `test/setup.js` you can import `factoria` and add the model definitions there.
-
-Another approach is to have a wrapper module around factoria, have all models defined inside the module, and finally `export` factoria itself. You can then `import` the wrapper and use the imported object as a factoria instance (because it _is_ a factoria instance), with all model definitions registered:
-
-```js
-// tests/factory.js
+```ts
+// somewhere in your test setup, e.g. tests/factory.ts
 import factory from 'factoria'
 
-// define the models
-factory.define('User', faker => ({}))
-       .define('Group', faker => ({}))
+interface User { id: string; email: string; verified: boolean }
+interface Company { id: string; name: string; owner: User }
 
-// now export factoria itself
-export default factory
+declare module 'factoria' {
+  namespace Factoria {
+    interface ModelRegistry {
+      user: User
+      company: Company
+    }
+  }
+}
+
+factory.define('user', faker => ({       // 'user' autocompletes
+  id: faker.string.uuid(),
+  email: faker.internet.email(),
+  verified: true
+}))
+
+const user = factory('user').make()         // User
+const users = factory('user').make(3)       // User[]
+factory('user').make({ verified: false })   // overrides type-checked against User
 ```
 
-```js
-// tests/user.spec.js
-import factory from './factory'
+Unregistered names still work via the explicit-generic fallback (`factory<Foo>('foo')`), so this is purely additive —
+projects don't need to register every model.
 
-// `factory` is a factoria function instance
-const user = factory('User')
-```
+## Breaking changes in v5
 
-factoria itself uses this approach for its tests.
+### Builder API replaces the immediate-return call
+
+`factory(name, ...)` no longer returns a model directly. It returns a builder; you finish the chain with `.make()`. State is per-builder, so the v4 module-level state leak (`factory.states(...)` bleeding into later calls) is gone.
+
+| v4                                    | v5                                                               |
+|---------------------------------------|------------------------------------------------------------------|
+| `factory('user')`                     | `factory('user').make()`                                         |
+| `factory('user', { name: 'Alice' })`  | `factory('user').make({ name: 'Alice' })`                        |
+| `factory('user', 5)`                  | `factory('user').make(5)` _or_ `factory('user').count(5).make()` |
+| `factory('user', 5, { age: 27 })`     | `factory('user').make({ age: 27 }, 5)`                           |
+| `factory.states('admin')('user')`     | `factory('user').state('admin').make()`                          |
+| `factory.states('a', 'b')('user', 4)` | `factory('user').state('a', 'b').make(4)`                        |
+
+`factory.define` is unchanged.
+
+### ESM only
+
+The package is now `"type": "module"` and ships only an ESM build. Consumers must `import factory from 'factoria'`. `require('factoria')` is no longer supported.
 
 ## License
 

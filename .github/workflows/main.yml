@@ -1,22 +1,39 @@
 name: Main
 
-on: [push]
+on:
+  push:
+    branches: [master]
+  pull_request:
 
 jobs:
-  run:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node: [ 14, 15, 16 ]
+        node: [20, 22]
 
     steps:
-      - name: Check out
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: pnpm
+
       - name: Install dependencies
-        run: yarn install
-      - name: Run unit tests
-        run: yarn lint && yarn test
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type-check
+        run: pnpm type-check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build

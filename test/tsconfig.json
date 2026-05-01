@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "target": "es2020",
+    "module": "es2020",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noImplicitThis": false,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "skipLibCheck": true
   },
   "include": [
     "./**/*.ts"
