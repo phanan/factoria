@@ -4,6 +4,10 @@ import { Builder } from './builder'
 import { isDictionary } from './utils'
 
 export const resolveAttributes = <T> (attrs: Factoria.Overrides<T> | Factoria.Attributes): Record<string, any> => {
+  if (attrs instanceof Function) {
+    attrs = attrs(faker)
+  }
+
   const props: Factoria.Attributes = Object.assign({}, attrs)
 
   for (const key in props) {

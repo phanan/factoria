@@ -126,6 +126,13 @@ describe('basic functionalities', () => {
     })
   })
 
+  it('supports a top-level function as the overrides argument', () => {
+    assertUser(
+      factory('user').make((faker: Faker) => ({ email: 'foo@bar.net' })),
+      { email: 'foo@bar.net' }
+    )
+  })
+
   it('supports nested attributes', () => {
     assertUser(factory('company').make().manager)
   })

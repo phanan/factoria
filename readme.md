@@ -49,7 +49,7 @@ import factory from 'factoria'
 const user = factory<User>('user').make()
 
 // Generate a "User" object with "email" preset to "foo@bar.baz"
-const userWithPresetEmail = factory<User>('User').make({ email: 'foo@bar.baz' })
+const userWithPresetEmail = factory<User>('user').make({ email: 'foo@bar.baz' })
 
 // Generate an array of 5 "User" objects
 const users = factory<User>('user').count(5).make()

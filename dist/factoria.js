@@ -57,6 +57,9 @@ function assertCount(value) {
   }
 }
 const resolveAttributes = (attrs) => {
+  if (attrs instanceof Function) {
+    attrs = attrs(faker);
+  }
   const props = Object.assign({}, attrs);
   for (const key in props) {
     if (!Object.prototype.hasOwnProperty.call(props, key)) {
