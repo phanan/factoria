@@ -1,6 +1,6 @@
-# factoria ![Main](https://github.com/phanan/factoria/workflows/Main/badge.svg) ![npm](https://img.shields.io/npm/v/factoria)
+# factoria ![Main](https://github.com/phanan/factoria/workflows/Main/badge.svg) ![npm](https://img.shields.io/npm/v/factoria) ![bundle size](https://img.shields.io/bundlephobia/minzip/factoria?label=gzip)
 
-Simplistic model factory for Node/JavaScript, heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/master/database-testing#model-factories).
+A tiny model factory for Node and TypeScript — **1.07&nbsp;kB gzipped**, zero runtime deps beyond Faker. Heavily inspired by Laravel's [Model Factories](https://laravel.com/docs/master/database-testing#model-factories).
 
 ## Install
 
