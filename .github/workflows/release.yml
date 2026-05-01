@@ -17,15 +17,12 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
+      # Trusted publishing requires npm >= 11.5.1; Node 24 ships with npm 11.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
-
-      # Trusted publishing requires npm >= 11.5.1; node 22 ships with npm 10.
-      - name: Update npm
-        run: npm install -g npm@latest
 
       - name: Verify tag matches package.json version
         run: |
