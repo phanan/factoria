@@ -173,9 +173,9 @@ factory.define('user', faker => ({       // 'user' autocompletes
   verified: true
 }))
 
-const u = factory('user').make()         // u: User
-const us = factory('user').make(3)       // us: User[]
-factory('user').make({ verified: false }) // overrides type-checked against User
+const user = factory('user').make()         // User
+const users = factory('user').make(3)       // User[]
+factory('user').make({ verified: false })   // overrides type-checked against User
 ```
 
 Unregistered names still work via the explicit-generic fallback (`factory<Foo>('foo')`), so this is purely additive —
